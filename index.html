@@ -218,14 +218,6 @@
     object-fit: contain;
     -webkit-user-drag: none;
   }
-  .court-suit {
-    position: absolute; top: 3px; left: 5px; z-index: 2;
-    font-size: 13px; font-family: Georgia, serif; line-height: 1;
-  }
-  .court-suit.btm {
-    top: auto; bottom: 3px; left: auto; right: 5px;
-    transform: rotate(180deg);
-  }
 
   .card-back {
     transform: rotateY(180deg);
@@ -475,8 +467,6 @@
     .pip { font-size: 11.5px; }
     .ace-pip { font-size: 32px; }
     .court { top: 10px; bottom: 10px; left: 6px; right: 6px; border-width: 1.5px; }
-    .court-suit { font-size: 8px; top: 2px; left: 3px; }
-    .court-suit.btm { bottom: 2px; right: 3px; top: auto; left: auto; }
     .card-back { border-width: 3px; }
     .logo { font-size: 22px; }
     .chip-amount { font-size: 20px; min-width: 84px; }
@@ -827,8 +817,6 @@ function cardCenterHTML(card) {
   if (card.rank >= 11) {
     return `<div class="court">
       <img class="court-art" src="${COURT_ART[card.rank]}" alt="" draggable="false">
-      <span class="court-suit">${card.suit}</span>
-      <span class="court-suit btm">${card.suit}</span>
     </div>`;
   }
   const pips = PIP_LAYOUTS[card.rank].map(([x, y]) =>
