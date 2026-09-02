@@ -205,27 +205,26 @@
 
   /* 絵札 (J/Q/K): 枠付きの上下対称デザイン */
   .court {
-    position: absolute; top: 27px; bottom: 27px; left: 17px; right: 17px;
+    position: absolute; top: 20px; bottom: 20px; left: 12px; right: 12px;
     border: 2px solid currentColor; border-radius: 5px;
     overflow: hidden; pointer-events: none;
     background:
       repeating-linear-gradient(45deg, rgba(0,0,0,0.035) 0 3px, transparent 3px 9px),
       linear-gradient(180deg, #fbf7ea, #f2ebd6);
   }
-  .court::after {
-    content: ""; position: absolute; top: 50%; left: 5%; right: 5%;
-    border-top: 1px solid currentColor; opacity: 0.45;
+  .court-art {
+    position: absolute; inset: 3px;
+    width: calc(100% - 6px); height: calc(100% - 6px);
+    object-fit: contain;
+    -webkit-user-drag: none;
   }
-  .court-half {
-    position: absolute; left: 0; right: 0; height: 50%;
-    display: grid; place-items: center;
-  }
-  .court-half.top { top: 0; }
-  .court-half.bottom { bottom: 0; transform: rotate(180deg); }
-  .court-figure { font-size: 34px; line-height: 1; }
   .court-suit {
-    position: absolute; top: 4px; left: 6px;
+    position: absolute; top: 3px; left: 5px; z-index: 2;
     font-size: 13px; font-family: Georgia, serif; line-height: 1;
+  }
+  .court-suit.btm {
+    top: auto; bottom: 3px; left: auto; right: 5px;
+    transform: rotate(180deg);
   }
 
   .card-back {
@@ -475,9 +474,9 @@
     .pip-area { top: 8px; bottom: 8px; left: 15px; right: 15px; }
     .pip { font-size: 11.5px; }
     .ace-pip { font-size: 32px; }
-    .court { top: 15px; bottom: 15px; left: 9px; right: 9px; border-width: 1.5px; }
-    .court-figure { font-size: 17px; }
+    .court { top: 10px; bottom: 10px; left: 6px; right: 6px; border-width: 1.5px; }
     .court-suit { font-size: 8px; top: 2px; left: 3px; }
+    .court-suit.btm { bottom: 2px; right: 3px; top: auto; left: auto; }
     .card-back { border-width: 3px; }
     .logo { font-size: 22px; }
     .chip-amount { font-size: 20px; min-width: 84px; }
@@ -819,18 +818,17 @@ const PIP_LAYOUTS = {
   9:  [[25,10],[75,10],[25,36.7],[75,36.7],[50,50],[25,63.3],[75,63.3],[25,90],[75,90]],
   10: [[25,10],[75,10],[50,23.3],[25,36.7],[75,36.7],[25,63.3],[75,63.3],[50,76.7],[25,90],[75,90]],
 };
-const COURT_FIGURES = { 11: "💂", 12: "👸", 13: "🤴" };
+const COURT_ART = { 11: "card/court-jack.webp", 12: "card/court-queen.webp", 13: "card/court-king.webp" };
 
 function cardCenterHTML(card) {
   if (card.rank === 14) {
     return `<div class="ace-pip">${card.suit}</div>`;
   }
   if (card.rank >= 11) {
-    const fig = COURT_FIGURES[card.rank];
-    const half = `<span class="court-suit">${card.suit}</span><span class="court-figure">${fig}</span>`;
     return `<div class="court">
-      <div class="court-half top">${half}</div>
-      <div class="court-half bottom">${half}</div>
+      <img class="court-art" src="${COURT_ART[card.rank]}" alt="" draggable="false">
+      <span class="court-suit">${card.suit}</span>
+      <span class="court-suit btm">${card.suit}</span>
     </div>`;
   }
   const pips = PIP_LAYOUTS[card.rank].map(([x, y]) =>
